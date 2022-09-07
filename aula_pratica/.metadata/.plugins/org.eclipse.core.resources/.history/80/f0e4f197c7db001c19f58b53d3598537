@@ -1,0 +1,53 @@
+package apresentacao;
+
+import java.sql.*;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+
+/*Sistema para gerenciamento de estoque*/
+
+public class GerenciadorEstoque extends estoqueBD implements ActionListener {
+	
+
+	JButton buttonInserirProduto;
+	JButton buttonExcluirProduto;
+	JButton buttonAlterarProduto;
+	JButton buttonConsultarProduto;
+	
+	public static void main(String[] args) throws ClassNotFoundException{
+		
+
+		JFrame frame = new JFrame("Estoque de produtos - Mercado");
+		frame.setSize(250,150);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JPanel panel = new JPanel();
+		frame.add(panel);
+		
+		
+		AbrirConexao();
+		CriarBdProduto();
+		
+
+
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+}

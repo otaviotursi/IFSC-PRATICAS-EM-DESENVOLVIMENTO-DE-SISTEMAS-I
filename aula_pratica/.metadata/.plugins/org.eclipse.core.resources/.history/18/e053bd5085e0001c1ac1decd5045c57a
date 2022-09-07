@@ -1,0 +1,165 @@
+package apresentacao;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+
+/*Sistema para gerenciamento de estoque*/
+
+public class estoqueBD {
+	private static PreparedStatement ps;
+	private static ResultSet rs;
+	private static Statement st;
+	private static Connection conn = null;
+	private static produtoModel produto;
+	
+	public static void InserirProduto(produtoModel produto){
+		try {
+			String comando = String.format("INSERT INTO `estoque`( `nome`, `preco`, `quantidade`) VALUES ('"+produto.nome+"','"+produto.preco+"','"+produto.quantidade+"')");
+			st.execute(comando);
+			System.out.println("Produto inserido!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao inserir Produto."+ e.toString());
+		}
+	}
+	public static void InserirVenda(produtoModel produto){
+		try {
+			String comando = String.format("INSERT INTO `venda`(`codProduto` `nome`, `preco`, `quantidade`) VALUES ("+produto.codigo+",'"+produto.nome+"','"+produto.preco+"','"+produto.quantidade+"')");
+			st.execute(comando);
+			System.out.println("Venda realizada!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao inserir venda "+ e.toString());
+		}
+	}
+	
+	public static void AtualizarProduto(long codigo, long quantidade){
+		try {
+			String comando = String.format("UPDATE `estoque` SET  `quantidade`='"+quantidade+"' WHERE codProduto="+codigo+" ");
+			st.execute(comando);
+			System.out.println("Produto atualizado!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao atualizar Produto "+ e.toString());
+		}
+	}
+	
+	public static void DeletarProduto(long id){
+		try {
+			String comando = String.format("DELETE FROM `estoque` WHERE codProduto="+id+" ");
+			st.execute(comando);
+			System.out.println("Produto deletado!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao deletar Produto "+ e.toString());
+		}
+	}
+	public static produtoModel ConsultarProdutoUn(long codigo) throws Exception{
+		try {
+			String comando = String.format("SELECT * FROM `estoque` where codProduto="+codigo+"");
+
+			
+			ResultSet rs = st.executeQuery(comando);
+			while (rs.next()) {
+				produtoModel prod = new produtoModel();
+				prod.codigo = rs.getLong("codProduto");
+				prod.nome = rs.getString("nome");
+				prod.preco = rs.getDouble("preco");
+				prod.quantidade = rs.getLong("quantidade");
+				return prod;
+			}
+			
+			System.out.println("Consulta unitaria realizada!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar Produtos unitarios"+ e.toString());
+			throw new Exception("Erro");
+		}
+		
+		return produto;
+	}
+	
+	public static ArrayList<produtoModel> ConsultarProdutoTodos() throws Exception{
+		try {
+			String comando = String.format("SELECT * FROM `estoque`");
+
+			
+			ResultSet rs = st.executeQuery(comando);
+			ArrayList<produtoModel> resultado = new ArrayList<>();
+			while (rs.next()) {
+				produtoModel prod = new produtoModel();
+				prod.codigo = rs.getLong("codProduto");
+				prod.nome = rs.getString("nome");
+				prod.preco = rs.getDouble("preco");
+				prod.quantidade = rs.getLong("quantidade");
+				resultado.add(prod);
+			}
+			System.out.println("Consulta total realizada!");
+			return resultado;
+		} catch (SQLException e) {
+			System.out.println("Erro ao consultar todos os Produtos "+ e.toString());
+			throw new Exception("Erro");
+		}
+	}
+	
+	public static Connection AbrirConexao(){
+		try {
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/", "root", null);
+			System.out.println("Conectado com a base de dados!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao conectar na base de dados "+ e.toString());
+		}
+		return conn;
+	}
+	
+	public static void CriarBdProduto(){
+		try {
+			String query = "create database if not exists empresa";
+			st = conn.createStatement();
+			st.execute(query);
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/empresa", "root", null);
+			System.out.println("BD estoque CRIADO!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao criar bd funcionarios ");
+			e.printStackTrace();
+		}
+		try {
+			String query = "create table if not exists estoque (codProduto integer not null AUTO_INCREMENT, nome varchar(30) not null, preco Decimal, quantidade long not null,  PRIMARY KEY(id))";
+			st = conn.createStatement();
+			st.execute(query);
+			System.out.println("BD estoque CRIADO!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao criar bd funcionarios ");
+			e.printStackTrace();
+		}
+		try {
+			String query = "create table if not exists venda (id integer not null AUTO_INCREMENT, codProduto integer not null, data TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP, nome varchar(30) not null, preco Decimal not null, quantidade long not null,  PRIMARY KEY(id))";
+			st = conn.createStatement();
+			st.execute(query);
+			System.out.println("BD estoque CRIADO!");
+		} catch (SQLException e) {
+			System.out.println("Erro ao criar bd funcionarios ");
+			e.printStackTrace();
+		}
+	}
+	
+	public static void MockarBdProduto() {
+
+		produtoModel prod1 = new produtoModel();
+		prod1.codigo = 1;
+		prod1.nome = "Papel";
+		prod1.preco = 10.00;
+		prod1.quantidade = 100;
+		InserirProduto(prod1);
+		
+		produtoModel prod2 = new produtoModel();
+		prod2.codigo = 2;
+		prod2.nome = "Caderno";
+		prod2.preco = 15.00;
+		prod2.quantidade = 100;
+		InserirProduto(prod2);
+		
+		produtoModel prod3 = new produtoModel();
+		prod3.codigo = 3;
+		prod3.nome = "Lapiseira";
+		prod3.preco = 97.97;
+		prod3.quantidade = 100;
+		InserirProduto(prod3);
+	}
+}

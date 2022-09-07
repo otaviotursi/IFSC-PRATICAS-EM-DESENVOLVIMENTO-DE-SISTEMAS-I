@@ -1,0 +1,159 @@
+package apresentacao;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+
+
+/*Sistema para gerenciamento de estoque*/
+
+public class GerenciadorEstoque extends estoqueBD implements ActionListener {
+	
+
+	static JLabel labelItem;
+	JTextField idProduto;
+	JTextField quantidadeProduto;
+	JButton buttonAlterarProduto;
+	JButton buttonConsultarProduto;
+	private produtoModel produto;
+	
+	public GerenciadorEstoque() {
+		JFrame frame = new JFrame("Estoque de produtos - Mercado");
+		frame.setSize(350,350);
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		JPanel panel = new JPanel();
+		frame.add(panel);
+
+
+		
+		JPanel panel3 = new JPanel();
+		panel3.setSize(250,250);
+		panel3.setLayout(new BorderLayout());
+
+		labelItem = new JLabel();
+		String produtosConvertidos = ConverterProdutos();
+		labelItem.setText(produtosConvertidos);
+		panel3.add(labelItem);
+		
+		panel.add(panel3, BorderLayout.NORTH);
+
+		
+		
+		JPanel panel2 = new JPanel();
+		panel2.setSize(250,250);
+		panel2.setLayout(new BoxLayout(panel2, BoxLayout.Y_AXIS));
+		
+		idProduto = new JTextField (30);
+		idProduto.setText("Código do produto");
+		panel2.add(idProduto);
+		
+		quantidadeProduto = new JTextField (30);
+		quantidadeProduto.setText("Quantidade de produtos vendidos");
+		panel2.add(quantidadeProduto);
+		
+		panel.add(panel2, BorderLayout.CENTER);
+
+		
+		
+		JPanel panel1 = new JPanel();
+		panel1.setSize(250,150);
+		panel1.setLayout(new BorderLayout());
+
+		buttonAlterarProduto = new JButton("Vender produto");
+		buttonAlterarProduto.addActionListener(this);
+		panel1.add(buttonAlterarProduto, BorderLayout.EAST);
+		
+		buttonConsultarProduto = new JButton("Consultar Produto");
+		buttonConsultarProduto.addActionListener(this);
+		panel1.add(buttonConsultarProduto, BorderLayout.SOUTH);
+		
+		panel.add(panel1, BorderLayout.SOUTH);
+
+	}
+	
+	public static void main(String[] args){
+		AbrirConexao();
+		CriarBdProduto();
+		MockarBdProduto();
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override 
+			public void run() {
+				new GerenciadorEstoque();
+			}
+		});
+
+
+	}
+	
+	public static String ConverterProdutos(){
+		String produtosColecao = "Produtos";
+		try {
+			ArrayList<produtoModel> resultado = ConsultarProdutoTodos();
+			for(produtoModel prod : resultado){
+				produtosColecao += "Produto "+prod.codigo+": "+" Nome: "+prod.nome+" | Preço"+ prod.preco +" | Qnt: "+prod.quantidade+""+System.lineSeparator();
+			}
+			System.out.println(produtosColecao);
+			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return produtosColecao;
+		
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent arg) {
+		String comando = arg.getActionCommand();
+		System.out.println("comando: "+comando);
+		
+		long codigo = Integer.parseInt(this.idProduto.getText());
+		long quantidade = Long.parseLong(this.quantidadeProduto.getText());
+		
+		
+		switch (comando) {
+			case "Inserir":
+				InserirProduto(produto);
+				break;
+			
+			case "Excluir":
+				DeletarProduto(produto.codigo);
+				break;
+				
+			case "Vender produto":
+				
+				produto = new produtoModel();
+				AtualizarProduto(codigo, quantidade);
+				try {
+					produto = ConsultarProdutoUn(codigo);
+					produto.quantidade = quantidade;
+				} catch (Exception e) {
+					System.out.println(e.getMessage());
+				}
+				InserirVenda(produto);
+
+				break;
+			
+			case "Consultar Produto":
+				ConverterProdutos();
+				break;
+		}
+		
+	}
+	
+	
+}

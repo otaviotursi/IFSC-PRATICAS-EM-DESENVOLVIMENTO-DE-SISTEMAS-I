@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item key="selection" value="comandas"/>
+		<item key="wrap" value="true"/>
+		<item key="casesensitive" value="true"/>
+		<item key="wholeword" value="false"/>
+		<item key="incremental" value="false"/>
+		<item key="isRegEx" value="false"/>
+		<list key="findhistory">
+			<item value="comanda"/>
+			<item value="pedidosCozinha"/>
+			<item value="HistoricoComandasModel"/>
+			<item value="HistoricoComanda"/>
+			<item value="mesa"/>
+			<item value="update"/>
+			<item value="Deletar Produto Comanda"/>
+			<item value="Inserir Comanda"/>
+			<item value="Consultar Comanda"/>
+			<item value="Consultar Comanda Unica"/>
+			<item value="Deletar Comanda"/>
+			<item value="Pagar Comanda"/>
+			<item value="WHERE CODIGO"/>
+			<item value="Consultar valor Comanda"/>
+			<item value="SELECT * FROM `comanda` WHERE codigo=0"/>
+		</list>
+		<list key="replacehistory">
+			<item value="comandas"/>
+			<item value="pedidosCozinhas"/>
+			<item value="HistoricoComandaModel"/>
+			<item value="HistoricoComandas"/>
+			<item value="mesas"/>
+			<item value="Deletar Produto Mesa"/>
+			<item value="Inserir Produto Mesa"/>
+			<item value="Consultar Mesas"/>
+			<item value="Consultar Mesa Unica"/>
+			<item value="Deletar Mesa"/>
+			<item value="Pagar Mesa"/>
+			<item value=""/>
+			<item value="Consultar valor Mesa"/>
+			<item value="codigoProduto"/>
+			<item value="Produto"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item key="DIALOG_X_ORIGIN" value="1331"/>
+		<item key="DIALOG_Y_ORIGIN" value="336"/>
+		<item key="DIALOG_WIDTH" value="414"/>
+		<item key="DIALOG_HEIGHT" value="454"/>
+		<item key="DIALOG_FONT_NAME" value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI"/>
+	</section>
+</section>
